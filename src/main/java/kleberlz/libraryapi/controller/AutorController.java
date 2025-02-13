@@ -19,22 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import kleberlz.libraryapi.controller.dto.AutorDTO;
+import kleberlz.libraryapi.controller.dto.ErroResposta;
+import kleberlz.libraryapi.exceptions.OperacaoNaoPermitidaException;
+import kleberlz.libraryapi.exceptions.RegistroDuplicadoException;
 import kleberlz.libraryapi.model.Autor;
 import kleberlz.libraryapi.service.AutorService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/autores")
+@RequiredArgsConstructor
 // http://localhost:8080/autores
 public class AutorController {
 	
 	private final AutorService service;
 	
-	public AutorController(AutorService service) {
-		this.service = service;
-	}
 	
 	@PostMapping
-	public ResponseEntity<Void> salvar (@RequestBody AutorDTO autor) {
+	public ResponseEntity<Object> salvar (@RequestBody AutorDTO autor) {
+		try {
 		Autor autorEntidade = autor.mapearParaAutor();
 		service.salvar(autorEntidade);
 		
@@ -46,7 +49,13 @@ public class AutorController {
 				.toUri();
 		
 		return ResponseEntity.created(location).build();
+	} catch (RegistroDuplicadoException e){
+		var erroDTO = ErroResposta.conflito(e.getMessage());
+		return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+		
 	}
+	
+}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id) {
@@ -68,18 +77,24 @@ public class AutorController {
 	
 	// indempontente
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deletar(@PathVariable("id") String id){
-		var idAutor = UUID.fromString(id);
-		Optional<Autor> autorOptional = service.obterPorId(idAutor);
-		
-		if(autorOptional.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		service.deletar(autorOptional.get());
+	public ResponseEntity<Object> deletar(@PathVariable("id") String id){
+		try {
+			var idAutor = UUID.fromString(id);
+			Optional<Autor> autorOptional = service.obterPorId(idAutor);
+			
+			if(autorOptional.isEmpty()) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			service.deletar(autorOptional.get());
 		
 		return ResponseEntity.noContent().build();
+	} catch (OperacaoNaoPermitidaException e) {
+		var erroResposta = ErroResposta.respostaPadrao(e.getMessage());
+		return ResponseEntity.status(erroResposta.status()).body(erroResposta);
 	}
+}
+		
 	@GetMapping
 	public ResponseEntity<List<AutorDTO>> pesquisar(
 		@RequestParam(value = "nome", required = false) String nome, 
@@ -98,9 +113,11 @@ public class AutorController {
 	  
 	}
 	@PutMapping("{id}")
-	public ResponseEntity<Void> atualizar(
+	public ResponseEntity<Object> atualizar(
 			@PathVariable("id") String id, @RequestBody AutorDTO dto){
 		
+		try {
+			
 		var idAutor = UUID.fromString(id);
 		Optional<Autor>autorOptional = service.obterPorId(idAutor);
 		
@@ -116,5 +133,9 @@ public class AutorController {
 		service.atualizar(autor);
 		
 		return ResponseEntity.noContent().build();
+		} catch (RegistroDuplicadoException e) {
+			var erroDTO = ErroResposta.conflito(e.getMessage());
+			return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+		}
 	}
 }

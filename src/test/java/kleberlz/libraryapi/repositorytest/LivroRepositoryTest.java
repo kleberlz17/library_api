@@ -34,10 +34,10 @@ public class LivroRepositoryTest {
 		livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 		
 		Autor autor = autorRepository
-			.findById(UUID.fromString("f6607421-87ba-4bf8-8bf4-c67ade9fc892"))
+			.findById(UUID.fromString("fa37a309-caf8-4b6b-8bba-d47c2e679c6b"))
 				.orElse(null);
 		
-//		livro.setAutor(new Autor());
+		livro.setAutor(new Autor());
 		
 		livroRepository.save(livro);
 	}
@@ -71,15 +71,15 @@ public class LivroRepositoryTest {
 		livro.setGenero(GeneroLivro.FICCAO);
 		livro.setTitulo("Terceiro Livro");
 		livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
+//		
+//		Autor autor = new Autor();
+//		autor.setNome("José");
+//		autor.setNacionalidade("Brasileira");
+//		autor.setDataNascimento(LocalDate.of(1951, 1, 31));
 		
-		Autor autor = new Autor();
-		autor.setNome("José");
-		autor.setNacionalidade("Brasileira");
-		autor.setDataNascimento(LocalDate.of(1951, 1, 31));
-		
-		autorRepository.save(autor);
-		
-		livro.setAutor(autor);
+//		autorRepository.save(autor);
+//		
+//		livro.setAutor(autor);
 		
 		livroRepository.save(livro);
 	}
