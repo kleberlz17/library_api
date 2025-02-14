@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
 import kleberlz.libraryapi.controller.dto.AutorDTO;
 import kleberlz.libraryapi.controller.dto.ErroResposta;
 import kleberlz.libraryapi.exceptions.OperacaoNaoPermitidaException;
@@ -36,7 +37,7 @@ public class AutorController {
 	
 	
 	@PostMapping
-	public ResponseEntity<Object> salvar (@RequestBody AutorDTO autor) {
+	public ResponseEntity<Object> salvar (@RequestBody @Valid AutorDTO autor) {
 		try {
 		Autor autorEntidade = autor.mapearParaAutor();
 		service.salvar(autorEntidade);
