@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import kleberlz.libraryapi.controller.dto.AutorDTO;
 import kleberlz.libraryapi.controller.dto.ErroResposta;
+import kleberlz.libraryapi.controller.mappers.AutorMapper;
 import kleberlz.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import kleberlz.libraryapi.exceptions.RegistroDuplicadoException;
 import kleberlz.libraryapi.model.Autor;
@@ -34,19 +35,20 @@ import lombok.RequiredArgsConstructor;
 public class AutorController {
 	
 	private final AutorService service;
+	private final AutorMapper mapper;
 	
 	
 	@PostMapping
-	public ResponseEntity<Object> salvar (@RequestBody @Valid AutorDTO autor) {
+	public ResponseEntity<Object> salvar (@RequestBody @Valid AutorDTO dto) {
 		try {
-		Autor autorEntidade = autor.mapearParaAutor();
-		service.salvar(autorEntidade);
+		Autor autor = mapper.toEntity(dto);
+		service.salvar(autor);
 		
 		// criação da URL do localhost:8080
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(autorEntidade.getId())
+				.buildAndExpand(autor.getId())
 				.toUri();
 		
 		return ResponseEntity.created(location).build();
@@ -61,19 +63,13 @@ public class AutorController {
 	@GetMapping("{id}")
 	public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id) {
 		var idAutor = UUID.fromString(id);
-		Optional<Autor> autorOptional = service.obterPorId(idAutor);
-		if(autorOptional.isPresent()) {
-			Autor autor = autorOptional.get();
-			AutorDTO dto = new AutorDTO(
-					autor.getId(),
-					autor.getNome(),
-					autor.getDataNascimento(), autor.getNacionalidade());
-			return ResponseEntity.ok(dto);		
-		}
 		
-	return ResponseEntity.notFound().build();
-		
-		
+		return service
+				.obterPorId(idAutor)
+				.map(autor -> {
+					AutorDTO dto = mapper.toDTO(autor);
+					return ResponseEntity.ok(dto);
+				}).orElseGet( () -> ResponseEntity.notFound().build() );	
 	}
 	
 	// indempontente
@@ -103,12 +99,8 @@ public class AutorController {
 		List<Autor> resultado = service.pesquisaByExample(nome, nacionalidade);
 		List<AutorDTO> lista = resultado
 				.stream()
-				.map(autor -> new AutorDTO(
-						autor.getId(),
-						autor.getNome(),
-						autor.getDataNascimento(),
-						autor.getNacionalidade())
-				).collect(Collectors.toList());
+				.map(mapper::toDTO)
+				.collect(Collectors.toList());
 		
 		return ResponseEntity.ok(lista);
 	  
