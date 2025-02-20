@@ -1,6 +1,8 @@
 package kleberlz.libraryapi.controller;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import kleberlz.libraryapi.controller.dto.CadastroLivroDTO;
 import kleberlz.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import kleberlz.libraryapi.controller.mappers.LivroMapper;
+import kleberlz.libraryapi.model.GeneroLivro;
 import kleberlz.libraryapi.model.Livro;
 import kleberlz.libraryapi.service.LivroService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +63,30 @@ public class LivroController implements GenericController {
 		
 		
 	}
+	
+	@GetMapping
+	public ResponseEntity<List<ResultadoPesquisaLivroDTO>> pesquisa(
+			@RequestParam(value = "isbn", required = false)
+			String isbn,
+			@RequestParam(value = "titulo", required = false)
+			String titulo,
+			@RequestParam(value = "nome-autor", required = false)
+			String nomeAutor,
+			@RequestParam(value = "genero", required = false)
+			GeneroLivro genero,
+			@RequestParam(value = "ano-publicacao", required = false)
+			Integer anoPublicacao
+		){
+			var resultado = service.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao);
+			var lista = resultado
+					.stream()
+					.map(mapper::toDTO)
+					.collect(Collectors.toList());
+			
+			return ResponseEntity.ok(lista);
+			
+	}
+	
 	
 
 }
