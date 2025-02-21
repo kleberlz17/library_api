@@ -3,6 +3,7 @@ package kleberlz.libraryapi.repositorytest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -129,8 +130,8 @@ public class LivroRepositoryTest {
 	
 	@Test
 	void pesquisaPorISBNTest() {
-		List<Livro> lista = livroRepository.findByIsbn("99999-84874");
-		lista.forEach(System.out::println);
+		Optional<Livro> livro = livroRepository.findByIsbn("99999-84874");
+		livro.ifPresent(System.out::println);
 	
 	}
 	

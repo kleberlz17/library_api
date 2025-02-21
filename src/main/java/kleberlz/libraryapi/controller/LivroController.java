@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,9 +84,32 @@ public class LivroController implements GenericController {
 					.map(mapper::toDTO)
 					.collect(Collectors.toList());
 			
-			return ResponseEntity.ok(lista);
-			
+			return ResponseEntity.ok(lista);	
 	}
+	
+	@PutMapping("{id}")
+	public ResponseEntity<Object>atualizar(
+			@PathVariable("id") String id, @RequestBody @Valid CadastroLivroDTO dto){ 
+		return service.obterPorId(UUID.fromString(id))
+				.map(livro -> {
+					Livro entidadeAux = mapper.toEntity(dto);
+					
+					livro.setDataPublicacao(entidadeAux.getDataPublicacao());
+					livro.setIsbn(entidadeAux.getIsbn());
+					livro.setPreco(entidadeAux.getPreco());
+					livro.setGenero(entidadeAux.getGenero());
+					livro.setTitulo(entidadeAux.getTitulo());
+					livro.setAutor(entidadeAux.getAutor());
+					
+					service.atualizar(livro);
+					
+					return ResponseEntity.noContent().build();
+					
+				}).orElseGet( () -> ResponseEntity.notFound().build() );
+	}
+			
+	
+
 	
 	
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import kleberlz.libraryapi.model.GeneroLivro;
 import kleberlz.libraryapi.model.Livro;
 import kleberlz.libraryapi.repository.LivroRepository;
+import kleberlz.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import static kleberlz.libraryapi.repository.specs.LivroSpecs.*;
 
@@ -19,8 +20,11 @@ import static kleberlz.libraryapi.repository.specs.LivroSpecs.*;
 public class LivroService {
 	
 	private final LivroRepository repository;
+	private final LivroValidator validator;
+	
 	
 	public Livro salvar(Livro livro) {
+		validator.validar(livro);
 		return repository.save(livro);
 	}
 
@@ -62,7 +66,20 @@ public class LivroService {
 			specs = specs.and(anoPublicacaoEqual(anoPublicacao));
 		}
 		
+		if(nomeAutor != null) {
+			specs = specs.and(nomeAutorLike(nomeAutor));
+		}
+		
 		return repository.findAll(specs);
+		
+	}
+
+	public void atualizar(Livro livro) {
+		if(livro.getId() == null) {
+			throw new IllegalArgumentException("Para atualizar é necessário que o livro já esteja salvo na base.");
+		}
+		validator.validar(livro);
+		repository.save(livro);
 		
 	}
 }
