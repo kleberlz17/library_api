@@ -3,8 +3,8 @@ package kleberlz.libraryapi.service;
 
 import java.util.Optional;
 import java.util.UUID;
-
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class LivroService {
 		repository.delete(livro);
 	}
 	//isbn, titulo, nome autor, genero, ano de publicação
-	public org.springframework.data.domain.Page<Livro> pesquisa(
+	public Page<Livro> pesquisa(
 			String isbn,
 			String titulo,
 			String nomeAutor,
@@ -79,7 +79,7 @@ public class LivroService {
 			specs = specs.and(nomeAutorLike(nomeAutor));
 		}
 		
-		org.springframework.data.domain.Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+		Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
 		
 		return repository.findAll(specs, pageRequest);
 		

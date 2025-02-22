@@ -3,8 +3,7 @@ package kleberlz.libraryapi.controller;
 
 import java.util.UUID;
 
-
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,9 +82,9 @@ public class LivroController implements GenericController {
 			Integer tamanhoPagina
 			
 		){
-			org.springframework.data.domain.Page<Livro> paginaResultado = service.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
+			Page<Livro> paginaResultado = service.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
 			
-			org.springframework.data.domain.Page<ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(mapper::toDTO);
+			Page<ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(mapper::toDTO);
 			
 			return ResponseEntity.ok(resultado);	
 	}
