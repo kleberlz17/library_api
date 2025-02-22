@@ -65,7 +65,7 @@ public class LivroController implements GenericController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<org.springframework.data.domain.Page<ResultadoPesquisaLivroDTO>> pesquisa(
+	public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisa(
 			@RequestParam(value = "isbn", required = false)
 			String isbn,
 			@RequestParam(value = "titulo", required = false)
