@@ -18,8 +18,10 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
-				.formLogin(Customizer.withDefaults()) // habilitado formulario de login
-				.httpBasic(Customizer.withDefaults()) // habilidato http basic
+								.formLogin(configurer -> { // habilitado formulario de login
+					configurer.loginPage("/login").permitAll();
+				}) 
+				.httpBasic(Customizer.withDefaults()) // habilitado http basic
 				.authorizeHttpRequests(authorize -> { 
 					authorize.anyRequest().authenticated(); // REGRA DE ACESSO: tem que estar autenticado em qualquer requisição.
 				})
