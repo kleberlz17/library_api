@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Formulário de Login</title>
     <!-- Link do CSS do Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
     <div class="login-container">
         <h3>Login</h3>
-        <form method="post" th:action="@{/login}">
+        <form method="post" th:action="@{/login}"> // importante, deve ser acrescentado. o www.thymeleaf.org na linha 2 também. Se antes foi definido como name e password, deve ser mantido agora, não pode colocar usuário e senha entre "".
             <div class="form-group">
                 <label for="username" class="form-label">Usuário</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Digite seu usuário" required>
