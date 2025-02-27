@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import kleberlz.libraryapi.model.GeneroLivro;
 import kleberlz.libraryapi.model.Livro;
+import kleberlz.libraryapi.model.Usuario;
 import kleberlz.libraryapi.repository.LivroRepository;
+import kleberlz.libraryapi.security.SecurityService;
 import kleberlz.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import static kleberlz.libraryapi.repository.specs.LivroSpecs.*;
@@ -23,10 +25,13 @@ public class LivroService {
 	
 	private final LivroRepository repository;
 	private final LivroValidator validator;
+	private final SecurityService securityService;
 	
 	
 	public Livro salvar(Livro livro) {
 		validator.validar(livro);
+		Usuario usuario = securityService.obterUsuarioLogado();
+		livro.setUsuario(usuario);
 		return repository.save(livro);
 	}
 

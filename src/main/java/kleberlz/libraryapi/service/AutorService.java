@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import kleberlz.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import kleberlz.libraryapi.model.Autor;
+import kleberlz.libraryapi.model.Usuario;
 import kleberlz.libraryapi.repository.AutorRepository;
 import kleberlz.libraryapi.repository.LivroRepository;
+import kleberlz.libraryapi.security.SecurityService;
 import kleberlz.libraryapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 
@@ -23,10 +25,13 @@ public class AutorService {
 	private final AutorRepository repository;
 	private final AutorValidator validator;
 	private final LivroRepository livroRepository;
+	private final SecurityService securityService;
 	
 	
 	public Autor salvar(Autor autor) {
 		validator.validar(autor);
+		Usuario usuario = securityService.obterUsuarioLogado();
+		autor.setUsuario(usuario);
 		return repository.save(autor);
 	}
 	
