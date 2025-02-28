@@ -8,10 +8,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 import kleberlz.libraryapi.security.CustomUserDetailsService;
 import kleberlz.libraryapi.service.UsuarioService;
@@ -28,9 +30,10 @@ public class SecurityConfiguration {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
 				.httpBasic(Customizer.withDefaults())
-				.formLogin(configurer -> { // habilitado formulario de login
-					configurer.loginPage("/login");
-				}) 
+//				.formLogin(configurer -> { // habilitado formulario de login
+//					configurer.loginPage("/login");
+//				}) 
+				.formLogin(Customizer.withDefaults())
 				.authorizeHttpRequests(authorize -> { 
 					authorize.requestMatchers("/login/**").permitAll();
 					authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
@@ -38,6 +41,7 @@ public class SecurityConfiguration {
 					
 					authorize.anyRequest().authenticated(); // REGRA DE ACESSO: tem que estar autenticado em qualquer requisição.
 				})
+				.oauth2Login(Customizer.withDefaults())
 				.build();
 	}
 	
@@ -46,7 +50,7 @@ public class SecurityConfiguration {
 		return new BCryptPasswordEncoder(10);
 	}
 	
-	@Bean
+//	@Bean
 	public UserDetailsService userDetailsService(UsuarioService usuarioService) {
 //		UserDetails user1 = User.builder()
 //				.username("usuario")
@@ -63,6 +67,11 @@ public class SecurityConfiguration {
 //		return new InMemoryUserDetailsManager(user1, user2);
 //		
 		return new CustomUserDetailsService(usuarioService);
+	}
+	
+	@Bean
+	public GrantedAuthorityDefaults grantedAuthorityDefaults() { // Tirar a obrigatoriedade de ROLE_ (GERENTE, OPERADOR.. ETC) com "".
+		return new GrantedAuthorityDefaults("");
 	}
 	
 }
