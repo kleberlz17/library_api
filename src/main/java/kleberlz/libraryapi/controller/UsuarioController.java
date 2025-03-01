@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import kleberlz.libraryapi.controller.dto.UsuarioDTO;
 import kleberlz.libraryapi.controller.mappers.UsuarioMapper;
 import kleberlz.libraryapi.service.UsuarioService;
@@ -22,7 +23,7 @@ public class UsuarioController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void salvar(@RequestBody UsuarioDTO dto) {
+	public void salvar(@RequestBody @Valid UsuarioDTO dto) {
 		var usuario = mapper.toEntity(dto);
 		service.salvar(usuario);	
 	}

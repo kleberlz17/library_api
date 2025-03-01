@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 import kleberlz.libraryapi.security.CustomUserDetailsService;
+import kleberlz.libraryapi.security.LoginSocialSuccessHandler;
 import kleberlz.libraryapi.service.UsuarioService;
 
 @Configuration
@@ -26,7 +27,7 @@ public class SecurityConfiguration {
 	
 			// configuração padrão do SPRING Security
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler successHandler) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
 				.httpBasic(Customizer.withDefaults())
@@ -41,7 +42,9 @@ public class SecurityConfiguration {
 					
 					authorize.anyRequest().authenticated(); // REGRA DE ACESSO: tem que estar autenticado em qualquer requisição.
 				})
-				.oauth2Login(Customizer.withDefaults())
+				.oauth2Login(oauth2 -> {
+					oauth2.successHandler(successHandler); //RECEBER AUTHENTICATION DE UM TOKEN DE LUGAR DIFERENTE(LOGIN PELO EMAIL GOOGLE)
+				})
 				.build();
 	}
 	
