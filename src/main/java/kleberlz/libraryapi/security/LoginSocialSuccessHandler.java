@@ -2,6 +2,7 @@ package kleberlz.libraryapi.security;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
+	private static final String SENHA_PADRAO = "321";
 	private final UsuarioService usuarioService;
+	
 	
 	@Override
 		public void onAuthenticationSuccess(
@@ -36,10 +39,32 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
 		
 		Usuario usuario = usuarioService.obterPorEmail(email);
 		
+		if(usuario == null) {
+			usuario = cadastrarUsuarioNaBase(email);
+		}
+		
 		authentication = new CustomAuthentication(usuario);
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-			super.onAuthenticationSuccess(request, response, authentication);
-		}
+		super.onAuthenticationSuccess(request, response, authentication);
+	}
+	
+	private Usuario cadastrarUsuarioNaBase(String email) {
+		Usuario usuario;
+		usuario = new Usuario();
+		usuario.setEmail(email);
+		usuario.setLogin(obterLoginApartirEmail(email));
+		usuario.setSenha(SENHA_PADRAO);
+		usuario.setRoles(List.of("OPERADOR"));
+		
+		usuarioService.salvar(usuario);
+		return usuario;
+		
+	}
+
+	private String obterLoginApartirEmail(String email) {
+		return email.substring(0, email.indexOf("@")); // Pega o email recebido do indice 0 até a letra antes do @. Se tornando o login do usuário.
+		
+	}
 }

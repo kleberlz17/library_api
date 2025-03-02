@@ -35,7 +35,7 @@
 
     <div class="login-container">
         <h3>Login</h3>
-        <form method="post" th:action="@{/login}"> // importante, deve ser acrescentado. o www.thymeleaf.org na linha 2 também. Se antes foi definido como name e password, deve ser mantido agora, não pode colocar usuário e senha entre "".
+        <form method="post" th:action="@{/login}"> 
             <div class="form-group">
                 <label for="username" class="form-label">Usuário</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Digite seu usuário" required>
@@ -46,6 +46,9 @@
             </div>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
+        <br />
+        <hr />
+        <a th:href="@{/oauth2/authorization/google}" class="btn btn-primary">Entrar com Google</a>
     </div>
 
     <!-- Scripts do Bootstrap -->

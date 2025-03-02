@@ -31,10 +31,9 @@ public class SecurityConfiguration {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
 				.httpBasic(Customizer.withDefaults())
-//				.formLogin(configurer -> { // habilitado formulario de login
-//					configurer.loginPage("/login");
-//				}) 
-				.formLogin(Customizer.withDefaults())
+				.formLogin(configurer -> { // habilitado formulario de login
+					configurer.loginPage("/login");
+				}) 
 				.authorizeHttpRequests(authorize -> { 
 					authorize.requestMatchers("/login/**").permitAll();
 					authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
@@ -43,7 +42,9 @@ public class SecurityConfiguration {
 					authorize.anyRequest().authenticated(); // REGRA DE ACESSO: tem que estar autenticado em qualquer requisição.
 				})
 				.oauth2Login(oauth2 -> {
-					oauth2.successHandler(successHandler); //RECEBER AUTHENTICATION DE UM TOKEN DE LUGAR DIFERENTE(LOGIN PELO EMAIL GOOGLE)
+					oauth2
+						.loginPage("/login")
+						.successHandler(successHandler); //RECEBER AUTHENTICATION DE UM TOKEN DE LUGAR DIFERENTE(LOGIN PELO EMAIL GOOGLE)
 				})
 				.build();
 	}
