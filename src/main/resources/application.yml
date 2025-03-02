@@ -20,6 +20,11 @@ spring:
       client:
         registration:
           google:
+<<<<<<< HEAD
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
+=======
+            client-id: 
+            client-secret: 
+>>>>>>> 399e470c2b21911de75b6d1e0d5de967aee87040
             
