@@ -9,15 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 
-import kleberlz.libraryapi.security.CustomUserDetailsService;
+
 import kleberlz.libraryapi.security.LoginSocialSuccessHandler;
-import kleberlz.libraryapi.service.UsuarioService;
+
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +26,8 @@ public class SecurityConfiguration {
 	
 			// configuração padrão do SPRING Security
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler successHandler) throws Exception {
+	public SecurityFilterChain securityFilterChain(
+			HttpSecurity http, LoginSocialSuccessHandler successHandler) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
 				.httpBasic(Customizer.withDefaults())
@@ -46,36 +46,25 @@ public class SecurityConfiguration {
 						.loginPage("/login")
 						.successHandler(successHandler); //RECEBER AUTHENTICATION DE UM TOKEN DE LUGAR DIFERENTE(LOGIN PELO EMAIL GOOGLE)
 				})
+				.oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults())) //Configuração TOKEN JWT
 				.build();
 	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() { // criptografar a senha 10 vezes pra segurança.
-		return new BCryptPasswordEncoder(10);
-	}
-	
-//	@Bean
-	public UserDetailsService userDetailsService(UsuarioService usuarioService) {
-//		UserDetails user1 = User.builder()
-//				.username("usuario")
-//				.password(encoder.encode("123"))
-//				.roles("USER")
-//				.build();
-//		
-//		UserDetails user2 = User.builder()
-//				.username("admin")
-//				.password(encoder.encode("321"))
-//				.roles("ADMIN")
-//				.build();
-//		
-//		return new InMemoryUserDetailsManager(user1, user2);
-//		
-		return new CustomUserDetailsService(usuarioService);
-	}
-	
+	// CONFIGURA O PREFIXO ROLE
 	@Bean
 	public GrantedAuthorityDefaults grantedAuthorityDefaults() { // Tirar a obrigatoriedade de ROLE_ (GERENTE, OPERADOR.. ETC) com "".
 		return new GrantedAuthorityDefaults("");
+	}
+	
+	// CONFIGURA NO TOKEN JWT O PREFIXO SCOPE.
+	@Bean// abaixo ele pega o token acima, pega a ROLE e define qual o prefixo ou não que será usado. No caso abaixo é sem prefixo. Tipo = ROLE_GERENTE, sem o ROLE_
+	public JwtAuthenticationConverter jwtAuthenticationConverter() {
+		var authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+		authoritiesConverter.setAuthorityPrefix("");
+		
+		var converter = new JwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+		
+		return converter;
 	}
 	
 }
