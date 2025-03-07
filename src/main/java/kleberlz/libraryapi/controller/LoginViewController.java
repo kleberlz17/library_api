@@ -3,6 +3,7 @@ package kleberlz.libraryapi.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kleberlz.libraryapi.security.CustomAuthentication;
@@ -23,6 +24,12 @@ public class LoginViewController {
 		}
 		return "Olá " + authentication.getName();
 		
+	}
+	
+	@GetMapping("/authorized")
+	@ResponseBody // ABAIXO PARA OBTER O AUTHORIZATION CODE MANUALMENTE
+	public String getAuthorizationCodeString(@RequestParam("code")String code) {
+		return "Seu authorization code: " + code;
 	}
 
 }

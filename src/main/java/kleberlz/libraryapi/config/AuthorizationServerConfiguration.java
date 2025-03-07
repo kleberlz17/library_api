@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
@@ -38,7 +39,8 @@ public class AuthorizationServerConfiguration {
         
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         
-        http.oauth2Login(Customizer.withDefaults());
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+        		.oidc(Customizer.withDefaults());
         
         http.oauth2ResourceServer(oauth2Rs -> oauth2Rs.jwt(Customizer.withDefaults())); //Configuração TOKEN JWT
         
@@ -56,7 +58,10 @@ public class AuthorizationServerConfiguration {
     public TokenSettings tokenSettings(){
         return TokenSettings.builder()
                 .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+                // access_token: token utilizado nas requisições
                 .accessTokenTimeToLive(Duration.ofMinutes(60))
+                // refresh_token: token para renovar o access_token
+                .refreshTokenTimeToLive(Duration.ofMinutes(90))
                 .build();
     }
 
