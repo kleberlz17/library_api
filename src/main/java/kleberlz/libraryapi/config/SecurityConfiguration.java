@@ -11,10 +11,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
-
-
+import kleberlz.libraryapi.security.JwtCustomAuthenticationFilter;
 import kleberlz.libraryapi.security.LoginSocialSuccessHandler;
 
 
@@ -27,7 +27,9 @@ public class SecurityConfiguration {
 			// configuração padrão do SPRING Security
 	@Bean
 	public SecurityFilterChain securityFilterChain(
-			HttpSecurity http, LoginSocialSuccessHandler successHandler) throws Exception {
+			HttpSecurity http, 
+			LoginSocialSuccessHandler successHandler,
+			JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
 				.httpBasic(Customizer.withDefaults())
@@ -47,6 +49,7 @@ public class SecurityConfiguration {
 						.successHandler(successHandler); //RECEBER AUTHENTICATION DE UM TOKEN DE LUGAR DIFERENTE(LOGIN PELO EMAIL GOOGLE)
 				})
 				.oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults())) //Configuração TOKEN JWT
+				.addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
 				.build();
 	}
 	// CONFIGURA O PREFIXO ROLE
