@@ -7,6 +7,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -32,7 +33,7 @@ public class SecurityConfiguration {
 			JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable) // csrf desabilitado pq não é aplicação WEB
-				.httpBasic(Customizer.withDefaults())
+//				.httpBasic(Customizer.withDefaults())
 				.formLogin(configurer -> { // habilitado formulario de login
 					configurer.loginPage("/login");
 				}) 
@@ -52,6 +53,20 @@ public class SecurityConfiguration {
 				.addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
 				.build();
 	}
+	// ignorar docs padroes do swagger na documentação.
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return web -> web.ignoring().requestMatchers(
+				"/v2/api-docs/**",
+				"/v3/api-docs/**",
+				"/swagger-resources/**",
+				"/swagger-ui.html",
+				"/swagger-ui/**",
+				"/webjars/**"
+			);
+				
+	}
+	
 	// CONFIGURA O PREFIXO ROLE
 	@Bean
 	public GrantedAuthorityDefaults grantedAuthorityDefaults() { // Tirar a obrigatoriedade de ROLE_ (GERENTE, OPERADOR.. ETC) com "".
