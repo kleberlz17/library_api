@@ -16,13 +16,16 @@ import kleberlz.libraryapi.controller.dto.ErroResposta;
 import kleberlz.libraryapi.exceptions.CampoInvalidoException;
 import kleberlz.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import kleberlz.libraryapi.exceptions.RegistroDuplicadoException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 	public ErroResposta handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		log.error("Erro de validação: {} ", e.getMessage());
 		List<FieldError> fieldErrors = e.getFieldErrors();
 		List<ErroCampo> listaErros = fieldErrors
 			.stream()
@@ -62,6 +65,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErroResposta handleErrosNaoTratados(RuntimeException e) {
+		log.error("Erro inesperado", e);
 		return new ErroResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				"Ocorreu um erro inesperado, entre em contato com a administração.", List.of());
 	}

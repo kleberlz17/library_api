@@ -15,11 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kleberlz.libraryapi.model.Client;
 import kleberlz.libraryapi.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("clients")
 @RequiredArgsConstructor
 @Tag(name = "Clientes")
+@Slf4j
 public class ClientController {
 	
 	private final ClientService service;
@@ -34,6 +36,7 @@ public class ClientController {
 		@ApiResponse(responseCode = "409", description = "Cliente já cadastrado. ")	
 	})
 	public void salvar(@RequestBody Client client) {
+		log.info("Registrando novo Client: {} com scope: {} ", client.getClientId(), client.getScope());
 		service.salvar(client);
 	}
 

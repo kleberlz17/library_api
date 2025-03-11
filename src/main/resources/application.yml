@@ -23,5 +23,23 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
 
+logging:
+  file:
+    name: app.log
+  level: 
+    root: info
+    org:
+      springframework:
+        web: debug
+        security: trace
+    # Configuração específica para minha API.
+    libraryapi: trace
+
+# trace - nível mais detalhado de logs
+# debug - depuração, informações de debug
+# info - informações gerais sobre o funcionamento normal da aplicação
+# warn - indica eventos potencialmente problemáticos
+# error - quando dá erro, exception.
+
 springdoc:
   override-with-generic-response: false
