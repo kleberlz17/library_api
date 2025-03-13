@@ -10,9 +10,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
+@Slf4j
 public class DatabaseConfiguration {
-	
+	// OS DADOS ABAIXO VEM DO ARQUIVO application.yml.
 	@Value("${spring.datasource.url}")
 	String url;
 	@Value("${spring.datasource.username}")
@@ -34,6 +37,10 @@ public class DatabaseConfiguration {
 	
 	@Bean
 	public DataSource hikariDataSource() {
+		
+		log.info("Iniciando conexão com o banco na URL: {}", url);
+		
+		
 		HikariConfig config = new HikariConfig();
 		config.setUsername(username);
 		config.setPassword(password);
