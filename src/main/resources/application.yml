@@ -2,16 +2,16 @@ spring:
   application:
     name: libraryapi
   profiles:
-    active:
+    active: 
   
   output:
     ansi:
       enabled: ALWAYS
 
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL_PRODUCTION}
+    username: ${DATASOURCE_USERNAME_PRODUCTION}
+    password: ${DATASOURCE_PASSWORD_PRODUCTION}
     driver-class-name: org.postgresql.Driver
 
   jpa:

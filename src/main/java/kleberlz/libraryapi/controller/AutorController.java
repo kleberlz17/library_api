@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +26,7 @@ import jakarta.validation.Valid;
 import kleberlz.libraryapi.controller.dto.AutorDTO;
 import kleberlz.libraryapi.controller.mappers.AutorMapper;
 import kleberlz.libraryapi.model.Autor;
-import kleberlz.libraryapi.model.Usuario;
-import kleberlz.libraryapi.security.SecurityService;
 import kleberlz.libraryapi.service.AutorService;
-import kleberlz.libraryapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

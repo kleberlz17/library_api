@@ -1,13 +1,12 @@
 package kleberlz.libraryapi;
 
-import java.time.LocalDate;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import kleberlz.libraryapi.model.Autor;
-import kleberlz.libraryapi.repository.AutorRepository;
+
 
 @SpringBootApplication
 @EnableJpaAuditing
