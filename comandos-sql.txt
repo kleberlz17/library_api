@@ -62,3 +62,7 @@ INSERT into client
 values
 ( uuid_generate_v4(), 'client-production', '$2a$12$6CHTj5Pw6i8TywGMi6p5pujuFX0U/9aZ/OdARx84FTb382j1hCWsW',
 'http://localhost:8080/authorized', 'GERENTE');
+
+#BANCO DE DADOS AWS
+select * from usuario --gerente123 (senha)
+select * from client --admin123 (senha)

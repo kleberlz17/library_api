@@ -9,9 +9,9 @@ spring:
       enabled: ALWAYS
 
   datasource:
-    url: ${DATASOURCE_URL_PRODUCTION}
-    username: ${DATASOURCE_USERNAME_PRODUCTION}
-    password: ${DATASOURCE_PASSWORD_PRODUCTION}
+    url: ${DATASOURCE_URL_AWS}
+    username: ${DATASOURCE_USERNAME_AWS}
+    password: ${DATASOURCE_PASSWORD_AWS}
     driver-class-name: org.postgresql.Driver
 
   jpa:
