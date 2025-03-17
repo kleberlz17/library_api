@@ -11,6 +11,7 @@ import kleberlz.libraryapi.model.Usuario;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@SuppressWarnings("serial")
 @RequiredArgsConstructor
 @Getter
 public class CustomAuthentication implements Authentication {

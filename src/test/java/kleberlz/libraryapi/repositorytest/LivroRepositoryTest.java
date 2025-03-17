@@ -34,6 +34,7 @@ public class LivroRepositoryTest {
 		livro.setTitulo("Ciencias");
 		livro.setDataPublicacao(LocalDate.of(1980, 1, 2));
 		
+		@SuppressWarnings("unused")
 		Autor autor = autorRepository
 			.findById(UUID.fromString("fa37a309-caf8-4b6b-8bba-d47c2e679c6b"))
 				.orElse(null);
@@ -176,6 +177,7 @@ public class LivroRepositoryTest {
 	
 	@Test
 	void listarPorGeneroPositionalParamTest() {
+		@SuppressWarnings("unused")
 		var resultado = livroRepository.findByGeneroPositionalParameters(GeneroLivro.MISTERIO, "preco");
 	}
 	

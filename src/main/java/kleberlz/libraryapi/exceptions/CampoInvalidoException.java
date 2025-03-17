@@ -2,6 +2,7 @@ package kleberlz.libraryapi.exceptions;
 
 import lombok.Getter;
 
+@SuppressWarnings("serial")
 public class CampoInvalidoException extends RuntimeException {
 	
 	@Getter

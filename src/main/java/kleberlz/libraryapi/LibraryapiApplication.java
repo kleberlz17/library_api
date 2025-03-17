@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class LibraryapiApplication {
 
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		var context = SpringApplication.run(LibraryapiApplication.class, args);
 //		AutorRepository repository = context.getBean(AutorRepository.class);
 //		

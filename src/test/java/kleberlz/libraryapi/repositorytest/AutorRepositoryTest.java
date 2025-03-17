@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import jakarta.transaction.Transactional;
+
 import kleberlz.libraryapi.model.Autor;
 import kleberlz.libraryapi.model.GeneroLivro;
 import kleberlz.libraryapi.model.Livro;

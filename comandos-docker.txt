@@ -13,3 +13,6 @@ docker run --name pgadmin4 -p 15432:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com 
 # Reiniciar o Docker que foi fechado
 docker ps -a
 docker start idDoContainer
+
+#RODAR NA AWS
+sudo docker run --name libraryapi -e DATASOURCE_URL_PRODUCTION=jdbc:postgresql://libraryapi-database.c5wwa2cqwiti.us-east-2.rds.amazonaws.com:5432/library -e DATASOURCE_USERNAME_PRODUCTION=postgres -e DATASOURCE_PASSWORD_PRODUCTION=postgres -p 8080:8080 -p 9090:9090 kleberlz7/libraryapi
