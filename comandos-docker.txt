@@ -16,3 +16,9 @@ docker start idDoContainer
 
 #RODAR NA AWS
 sudo docker run --name libraryapi -e DATASOURCE_URL_PRODUCTION=jdbc:postgresql://libraryapi-database.c5wwa2cqwiti.us-east-2.rds.amazonaws.com:5432/library -e DATASOURCE_USERNAME_PRODUCTION=postgres -e DATASOURCE_PASSWORD_PRODUCTION=postgres -p 8080:8080 -p 9090:9090 kleberlz7/libraryapi
+
+#Deletar Container do Docker
+docker container rm nomedocontainer ou id
+
+#Criando container Docker básico
+docker run --name cd-mysql-latest -e MYSQL_ROOT_PASSWORD=root -d -p 3307:3306  mysql 
