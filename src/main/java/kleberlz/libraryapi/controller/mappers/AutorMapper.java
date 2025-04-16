@@ -7,6 +7,7 @@ import kleberlz.libraryapi.controller.dto.AutorDTO;
 import kleberlz.libraryapi.model.Autor;
 
 @Mapper(componentModel = "spring")
+// 2 - CONVERTE O DTO PARA A ENTIDADE
 public interface AutorMapper {
 	
 	@Mapping(source = "nome", target = "nome") // nesses 3 casos é opcional quando target e soruce tem o mesmo nome/valor.

@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>io.github.cursodsousa</groupId>
+    <groupId>kleberlz.github</groupId>
     <artifactId>libraryapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>libraryapi</name>

@@ -141,7 +141,7 @@ public class AuthorizationServerConfiguration {
 					List<String> authoritiesList = 
 							authorities.stream().map(GrantedAuthority::getAuthority).toList(); 
 					
-					context.getClaims() // BOTA DENTRO DO CONTEXTO AS AUTHORITIES.
+					context.getClaims() // Reivindica(claim) as authorities pra dentro do contexto.
 					.claim("authorities", authoritiesList)
 					.claim("email", authentication.getUsuario().getEmail());
 				}
